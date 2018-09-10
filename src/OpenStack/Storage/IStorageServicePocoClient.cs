@@ -94,6 +94,17 @@ namespace OpenStack.Storage
         Task<StorageObject> DownloadStorageObject(string containerName, string objectName, Stream outputStream);
 
         /// <summary>
+        /// Downloads the content of a storage object from the remote OpenStack instance.
+        /// </summary>
+        /// <param name="containerName">The name of the parent storage container.</param>
+        /// <param name="objectName">The name of the storage object.</param>
+        /// <param name="length"></param>
+        /// <param name="outputStream">The output stream to copy the objects content to.</param>
+        /// <param name="offset"></param>
+        /// <returns>The details of the storage object.</returns>
+        Task<StorageObject> DownloadStorageObject(string containerName, string objectName, long offset, long length, Stream outputStream);
+
+        /// <summary>
         /// Deletes a storage object from the remote OpenStack instance.
         /// </summary>
         /// <param name="containerName">The name of the parent storage container.</param>

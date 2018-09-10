@@ -130,6 +130,17 @@ namespace OpenStack.Storage
         }
 
         /// <inheritdoc/>
+        public async Task<StorageObject> DownloadStorageObject(string containerName, string objectName, long offset, long length, Stream outputStream)
+        {
+            containerName.AssertIsNotNullOrEmpty("containerName", "download create a storage object with a container name that is null or empty.");
+            objectName.AssertIsNotNullOrEmpty("objectName", "Cannot download a storage object with a name that is null or empty.");
+            outputStream.AssertIsNotNull("outputStream", "Cannot download a storage object with a null output stream.");
+
+            var client = this.GetPocoClient();
+            return await client.DownloadStorageObject(containerName, objectName, outputStream);
+        }
+
+        /// <inheritdoc/>
         public async Task DeleteStorageObject(string containerName, string objectName)
         {
             containerName.AssertIsNotNullOrEmpty("containerName", "Cannot delete a storage object with a container name that is null or empty.");

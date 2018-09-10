@@ -265,6 +265,30 @@ namespace OpenStack.Storage
         }
 
         /// <inheritdoc/>
+        public async Task<StorageObject> DownloadStorageObject(string containerName, string objectName, long offset, long length, Stream outputStream)
+        {
+            containerName.AssertIsNotNullOrEmpty("containerName", "Cannot download a storage object with a container name that is null or empty.");
+            objectName.AssertIsNotNullOrEmpty("objectName", "Cannot download a storage object with a name that is null or empty.");
+            outputStream.AssertIsNotNull("outputStream", "Cannot download a storage object with a null output stream.");
+
+            var client = this.GetRestClient();
+            var resp = await client.GetObjectRange(containerName, objectName, offset, length);
+
+            if (resp.StatusCode != HttpStatusCode.OK)
+            {
+                throw new InvalidOperationException(string.Format("Failed to download storage object '{0}'. The remote server returned the following status code: '{1}'.", objectName, resp.StatusCode));
+            }
+
+            var converter = this.ServiceLocator.Locate<IStorageObjectPayloadConverter>();
+            var obj = converter.Convert(containerName, objectName, resp.Headers);
+
+            await resp.Content.CopyAsync(outputStream);
+            outputStream.Position = 0;
+
+            return obj;
+        }
+
+        /// <inheritdoc/>
         public async Task DeleteStorageObject(string containerName, string itemName)
         {
             containerName.AssertIsNotNullOrEmpty("containerName", "Cannot delete a storage object with a container name that is null or empty.");

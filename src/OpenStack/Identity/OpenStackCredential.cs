@@ -46,6 +46,13 @@ namespace OpenStack.Identity
         /// <summary>
         /// Creates a new instance of the OpenStackCredential class.
         /// </summary>
+        protected OpenStackCredential()
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of the OpenStackCredential class.
+        /// </summary>
         /// <param name="endpoint">The endpoint to be used for authentication.</param>
         /// <param name="userName">the user name to be used for authentication.</param>
         /// <param name="password">The password to be used for authentication.</param>
